@@ -1,24 +1,16 @@
+import { useRouter } from "expo-router";
 import { useEffect, useState } from "react";
 import { FlatList, Pressable, StyleSheet, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
-export default function TestScreen() {
+export default function ProjectsScreen() {
 
     const [projets, setProjets] = useState<{ name: string }[]>([])
 
+    const router = useRouter();
+
     useEffect(() => refresh(), []);
 
-    function refresh() {
-        fetch("http://10.234.173.137:8080/project/all")
-            .then((reponse) => reponse.json())
-            .then((projets) => setProjets(projets));
-    }
-
-
-    function onDelete(item: any) {
-        fetch("http://10.234.173.137:8080/project/" + item.id, { method: "DELETE" })
-            .then(() => refresh());
-    }
 
     return (
         <SafeAreaView style={styles.contenu}>
@@ -32,6 +24,10 @@ export default function TestScreen() {
                         <Pressable onPress={() => onDelete(item)}>
                             <Text>Supprimer</Text>
                         </Pressable>
+
+                        <Pressable onPress={() => onShowDetails(item)}>
+                            <Text>Afficher</Text>
+                        </Pressable>
                     </View>
                 )}>
             </FlatList>
@@ -39,6 +35,25 @@ export default function TestScreen() {
         </SafeAreaView>
 
     )
+
+    function refresh() {
+        fetch("http://10.234.173.137:8080/project/all")
+            .then((reponse) => reponse.json())
+            .then((projets) => setProjets(projets));
+    }
+
+
+    function onDelete(item: any) {
+        fetch("http://10.234.173.137:8080/project/" + item.id, { method: "DELETE" })
+            .then(() => refresh());
+    }
+
+    function onShowDetails(item: any) {
+
+
+        router.navigate("/project/details-project");
+
+    }
 }
 
 
