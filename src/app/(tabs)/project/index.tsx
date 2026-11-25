@@ -50,8 +50,7 @@ export default function ProjectsScreen() {
 
     function onShowDetails(item: any) {
 
-
-        router.navigate("/project/details-project");
+        router.navigate("/project/" + item.id);
 
     }
 }
